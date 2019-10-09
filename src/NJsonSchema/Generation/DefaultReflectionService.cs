@@ -311,14 +311,19 @@ namespace NJsonSchema.Generation
         /// <returns>true or false.</returns>
         protected virtual bool IsDictionaryType(ContextualType contextualType)
         {
+            bool IsDictionaryInterface(Type type)
+            {
+                return type == typeof(IDictionary) ||
                        (type.IsConstructedGenericType && (type.GetGenericTypeDefinition() == typeof(IDictionary<,>) || type.GetGenericTypeDefinition() == typeof(IReadOnlyDictionary<,>)));
+            }
+            
             if (contextualType.TypeName == "IDictionary`2" || contextualType.TypeName == "IReadOnlyDictionary`2")
             {
                 return true;
             }
 
-            return contextualType.TypeInfo.ImplementedInterfaces.Contains(typeof(IDictionary)) &&
-                (contextualType.TypeInfo.BaseType == null ||
+            return contextualType.TypeInfo.ImplementedInterfaces.Any(IsDictionaryInterface) &&
+                   (contextualType.TypeInfo.BaseType == null ||
                     !contextualType.TypeInfo.BaseType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IDictionary)));
         }
 
