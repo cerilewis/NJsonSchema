@@ -311,6 +311,7 @@ namespace NJsonSchema.Generation
         /// <returns>true or false.</returns>
         protected virtual bool IsDictionaryType(ContextualType contextualType)
         {
+                       (type.IsConstructedGenericType && (type.GetGenericTypeDefinition() == typeof(IDictionary<,>) || type.GetGenericTypeDefinition() == typeof(IReadOnlyDictionary<,>)));
             if (contextualType.TypeName == "IDictionary`2" || contextualType.TypeName == "IReadOnlyDictionary`2")
             {
                 return true;
